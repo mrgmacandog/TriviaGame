@@ -1,0 +1,20 @@
+body {
+    background-image: url("../images/new-york-skyline.jpg");
+    background-size: cover;
+    text-align: center;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.75);
+    margin-top: 10px;
+}
+
+@media screen and (max-width: 575px) {
+    .container {
+        margin-top: 0px;
+    }
+}
+
+.hidden {
+    display: none;
+}
