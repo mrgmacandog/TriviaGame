@@ -15,6 +15,8 @@
 
         let currentQuestion;
 
+        let answerButton;
+
         // TriviaQuestion constructor
         //     Takes in a question and 4 options
         function TriviaQuestion(question, answer, options) {
@@ -22,6 +24,9 @@
             this.answer = answer;
             this.options = options;
         }
+
+        let numCorrect = 0;
+        let numIncorrect = 0;
 
         // Time left
         let timeLeft;
@@ -85,7 +90,7 @@
                                     "Jason Segel",
                                     "Josh Radnor",
                                     "Neil Patrick Harris"]),
-                new TriviaQuestion("How many seasons were there?",
+                new TriviaQuestion("How many seasons are there?",
                                    "9",
                                    ["9",
                                     "7",
@@ -106,7 +111,6 @@
             unhide($("#time"));
             unhide($("#question"));
             unhide($(".option"));
-            unhide($("#reset"));
 
             
             
@@ -133,31 +137,70 @@
                 // Pause timer and show answer
                 showAnswer("time");
 
+                // Highlight correct answer in green
+                highlightAnswer();
+
                 // Wait 3 seconds before moving on to the next question
-                setTimeout(getNewQuestion, 3000);
+                setTimeout(function() {
+                    // Change the green correct option back to grey
+                    answerButton.removeClass("btn-success");
+                    answerButton.addClass("btn-light");
+
+                    getNewQuestion();
+                }, 3000);
             }
         }
 
-        function checkAnswer(answer) {
-            console.log(answer, currentQuestion.answer);
-            if (answer === currentQuestion.answer) {
-                console.log("correct");
+        function checkOption() {
+            let thisOption = $(this);
+
+            // Highlight correct answer in green
+            highlightAnswer();
+
+            if (thisOption.text() === currentQuestion.answer) {
+                // Increase the number of correct answers
+                numCorrect++;
                 // Pause timer and show answer
                 showAnswer("correct");
+
             } else {
-                console.log("incorrect");
+                thisOption.removeClass("btn-light");
+                thisOption.addClass("btn-danger");
+                // Increase the number of incorrect answers
+                numIncorrect++;
+                // Pasue timer and show answer
                 showAnswer("incorrect");
             }
 
-            
-
             // Wait 3 seconds before moving on to the next question
-            setTimeout(getNewQuestion, 3000);
+            setTimeout(function() {
+                // Change the green correct option back to grey
+                answerButton.removeClass("btn-success");
+                answerButton.addClass("btn-light");
+                // Change the red incorrect option back to grey
+                thisOption.removeClass("btn-success");
+                thisOption.addClass("btn-light");
+
+                getNewQuestion();
+            }, 3000);
+        }
+        
+        // Highlight correct answer in green
+        function highlightAnswer() {
+            // Disable the ability to make another guess
+            $(".option").prop("disabled", true);
+
+            // Show correct answer in green
+            answerButton.removeClass("btn-light");
+            answerButton.addClass("btn-success");
         }
 
         function getNewQuestion() {
             // Reset time
             timeLeft = START_TIME;
+
+            // Enable the buttons to make a guess
+            $(".option").prop("disabled", false);
 
             // Set time interval to countd down every 1 second
             intervalId = setInterval(countDown, 1000);
@@ -167,6 +210,7 @@
 
             // Update display
             $("#seconds").text(START_TIME + " Seconds");
+            hide("#answer-outcome");
             $("#question").text(currentQuestion.question);
             for (let i = 0; i < 4; i++) {
                 // Get random option from the question's options
@@ -174,6 +218,11 @@
                 
                 // Remove the option from the question's options
                 currentQuestion.options.splice(currentQuestion.options.indexOf(option), 1);
+
+                // Save the button with the correct answer as the answerButton
+                if (option === currentQuestion.answer) {
+                    answerButton = $("#option" + (i + 1));
+                }
 
                 // Set the option text to be the rand option
                 $("#option" + (i + 1)).text(option);
@@ -192,7 +241,7 @@
             clearInterval(intervalId);
 
             // Inform user if they are right or wrong
-            $("#answer-outcome").removeClass("hidden");
+            unhide("#answer-outcome");
 
             switch(outcome) {
                 case "correct":
@@ -212,10 +261,11 @@
         function reset() {
             clearInterval(intervalId);
 
-            unhide($("#start"));
-            hide($("#time"));
-            hide($("#question"));
-            hide($(".option"));
+            unhide("#start");
+            hide("#time");
+            hide("#question");
+            hide(".option");
+            hide("#answer-outcome");
             hide($("#reset"));
 
             // Reset the time to 15 seconds
@@ -225,38 +275,24 @@
             createQuestions();
         }
 
-        // Hide jQuery element(s)
+        // Hide element(s) using css selector
         function hide(el) {
-            el.addClass("hidden");
+            $(el).addClass("hidden");
         }
 
-        // Unhide jQuery element(s)
+        // Unhide element(s) using css selector
         function unhide(el) {
-            el.removeClass("hidden");
+            $(el).removeClass("hidden");
         }
 
-        // Create TriviaQuestion objects
-        createQuestions();
+        // Intitally set the game
+        reset();
 
         // Start the game when the start button is clicked
         $("#start").on("click", start);
 
-        // Make a choice
-        $("#option1").on("click", function() {
-            checkAnswer(this.innerText);
-        });
-
-        $("#option2").on("click", function() {
-            checkAnswer(this.innerText);
-        });
-
-        $("#option3").on("click", function() {
-            checkAnswer(this.innerText);
-        });
-
-        $("#option4").on("click", function() {
-            checkAnswer(this.innerText);
-        });
+        // Check if the option clicked is correct
+        $(".option").on("click", checkOption);
 
         // Reset the game when the reset button is clicked
         $("#reset").on("click", reset);
