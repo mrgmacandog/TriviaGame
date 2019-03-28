@@ -176,7 +176,7 @@
             setTimeout(function() {
                 
                 // Change the red incorrect option back to grey
-                thisButton.removeClass("btn-success");
+                thisButton.removeClass("btn-danger");
                 thisButton.addClass("btn-dark");
 
                 questionOrStats()
