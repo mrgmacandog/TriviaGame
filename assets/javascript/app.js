@@ -8,7 +8,7 @@
     $(document).ready(function() {
 
         // How long each question lasts
-        const START_TIME = 5;
+        const START_TIME = 15;
 
         // Initialize array of TriviaQuestion objects
         let questions;
@@ -119,19 +119,25 @@
         }
 
         function countDown() {
-            if (timeLeft > 0) {
-                // Decrease one second
-                timeLeft -= 1;
+            // Decrease one second
+            timeLeft -= 1;
 
-                // Update the time remaining on the web page
-                if (timeLeft === 1) {  // Change "Seconds" to "Second" for 1 secsond remaining
-                    $("#seconds").text(timeLeft + " Second");
-                } else {
-                    $("#seconds").text(timeLeft + " Seconds");
-                }
-
-                console.log(timeLeft);
+            // Update the time remaining on the web page
+            if (timeLeft === 1) {  // Change "Seconds" to "Second" for 1 secsond remaining
+                $("#seconds").text(timeLeft + " Second");
             } else {
+                $("#seconds").text(timeLeft + " Seconds");
+            }
+
+            // Shorten the bar after each second
+            $(".progress-bar").css("width", timeLeft / START_TIME * 100 + "%");
+
+            if (timeLeft <= 3) {
+                $(".progress-bar").removeClass("bg-info");
+                $(".progress-bar").addClass("bg-danger");
+            }
+
+            if (timeLeft === 0) {
                 // Increase the number of unaswered questions
                 numUnaswered++;
                 console.log("ran out of time");
@@ -149,6 +155,36 @@
                     questionOrStats()
                 }, 3000);
             }
+            // if (timeLeft > 0) {
+            //     // Decrease one second
+            //     timeLeft -= 1;
+
+            //     // Update the time remaining on the web page
+            //     if (timeLeft === 1) {  // Change "Seconds" to "Second" for 1 secsond remaining
+            //         $("#seconds").text(timeLeft + " Second");
+            //     } else {
+            //         $("#seconds").text(timeLeft + " Seconds");
+            //     }
+
+            //     console.log(timeLeft);
+            // } else {
+            //     // Increase the number of unaswered questions
+            //     numUnaswered++;
+            //     console.log("ran out of time");
+
+            //     // Pause timer and show answer
+            //     showAnswer("time");
+
+            //     // Highlight correct answer in green
+            //     highlightAnswer();
+
+            //     // Wait 3 seconds before moving on to the next question
+            //     setTimeout(function() {
+                    
+                    
+            //         questionOrStats()
+            //     }, 3000);
+            // }
         }
 
         function checkOption() {
@@ -211,6 +247,11 @@
             // Enable the buttons to make a guess
             $(".option").prop("disabled", false);
 
+            // Reset the time left bar
+            $(".progress-bar").css("width", "100%");
+            $(".progress-bar").removeClass("bg-danger");
+            $(".progress-bar").addClass("bg-info");
+
             // Get random question
             currentQuestion = questions[Math.floor(Math.random() * questions.length)];
 
@@ -253,13 +294,16 @@
             switch(outcome) {
                 case "correct":
                     // switch case for correct, incorrect, 
-                    $("#answer-outcome").text("correct");
+                    // $("#answer-outcome").css("color", "#28A745");
+                    $("#answer-outcome").text("Correct!");
                     break;
                 case "incorrect":
-                    $("#answer-outcome").text("incorrect");
+                    // $("#answer-outcome").css("color", "#DC3545");
+                    $("#answer-outcome").text("Incorrect!");
                     break;
                 default:
-                $("#answer-outcome").text("out of time");
+                // $("#answer-outcome").css("color", "#DC3545");
+                $("#answer-outcome").text("Out of time!");
             }
         }
 
