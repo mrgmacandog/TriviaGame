@@ -144,28 +144,31 @@
                 setTimeout(function() {
                     // Change the green correct option back to grey
                     answerButton.removeClass("btn-success");
-                    answerButton.addClass("btn-light");
-
-                    getNewQuestion();
+                    answerButton.addClass("btn-dark");
+                    if (questions.length >= 1) {
+                        getNewQuestion();
+                    } else {
+                        alert("game over");
+                    }
                 }, 3000);
             }
         }
 
         function checkOption() {
-            let thisOption = $(this);
+            let thisButton = $(this);
 
             // Highlight correct answer in green
             highlightAnswer();
 
-            if (thisOption.text() === currentQuestion.answer) {
+            if (thisButton.text() === currentQuestion.answer) {
                 // Increase the number of correct answers
                 numCorrect++;
                 // Pause timer and show answer
                 showAnswer("correct");
 
             } else {
-                thisOption.removeClass("btn-light");
-                thisOption.addClass("btn-danger");
+                thisButton.removeClass("btn-dark");
+                thisButton.addClass("btn-danger");
                 // Increase the number of incorrect answers
                 numIncorrect++;
                 // Pasue timer and show answer
@@ -176,12 +179,16 @@
             setTimeout(function() {
                 // Change the green correct option back to grey
                 answerButton.removeClass("btn-success");
-                answerButton.addClass("btn-light");
+                answerButton.addClass("btn-dark");
                 // Change the red incorrect option back to grey
-                thisOption.removeClass("btn-success");
-                thisOption.addClass("btn-light");
+                thisButton.removeClass("btn-success");
+                thisButton.addClass("btn-dark");
 
-                getNewQuestion();
+                if (questions.length >= 1) {
+                    getNewQuestion();
+                } else {
+                    alert("game over");
+                }
             }, 3000);
         }
         
@@ -191,7 +198,7 @@
             $(".option").prop("disabled", true);
 
             // Show correct answer in green
-            answerButton.removeClass("btn-light");
+            answerButton.removeClass("btn-dark");
             answerButton.addClass("btn-success");
         }
 
