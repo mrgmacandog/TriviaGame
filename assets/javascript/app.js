@@ -130,8 +130,11 @@
             } else {
                 console.log("ran out of time");
 
-                // Get random question
-                start();
+                // Pause timer and show answer
+                showAnswer("time");
+
+                // Wait 3 seconds before moving on to the next question
+                setTimeout(getNewQuestion, 3000);
             }
         }
 
@@ -139,19 +142,22 @@
             console.log(answer, currentQuestion.answer);
             if (answer === currentQuestion.answer) {
                 console.log("correct");
+                // Pause timer and show answer
+                showAnswer("correct");
             } else {
                 console.log("incorrect");
+                showAnswer("incorrect");
             }
 
-            start();
+            
+
+            // Wait 3 seconds before moving on to the next question
+            setTimeout(getNewQuestion, 3000);
         }
 
         function getNewQuestion() {
             // Reset time
             timeLeft = START_TIME;
-
-            // Clear the interval timer
-            clearInterval(intervalId);
 
             // Set time interval to countd down every 1 second
             intervalId = setInterval(countDown, 1000);
@@ -181,6 +187,27 @@
             console.log(questions);
         }
 
+        function showAnswer(outcome) {
+            // Clear the interval timer
+            clearInterval(intervalId);
+
+            // Inform user if they are right or wrong
+            $("#answer-outcome").removeClass("hidden");
+
+            switch(outcome) {
+                case "correct":
+                    // switch case for correct, incorrect, 
+                    $("#answer-outcome").text("correct");
+                    break;
+                case "incorrect":
+                    $("#answer-outcome").text("incorrect");
+                    break;
+                default:
+                $("#answer-outcome").text("out of time");
+            }
+
+        }
+
         // Reset the game
         function reset() {
             clearInterval(intervalId);
@@ -193,6 +220,9 @@
 
             // Reset the time to 15 seconds
             timeLeft = START_TIME;
+
+            // Create TriviaQuestion objects
+            createQuestions();
         }
 
         // Hide jQuery element(s)
