@@ -27,6 +27,8 @@
 
         let numCorrect = 0;
         let numIncorrect = 0;
+        let numUnaswered = 0;
+
 
         // Time left
         let timeLeft;
@@ -36,7 +38,7 @@
         // Populate questions array with TriviaQueestion objects
         function createQuestions() {
             questions = [
-                new TriviaQuestion("What is the name of bar the gang frequently go to?",
+                new TriviaQuestion("What is the name of bar the gang frequently goes to?",
                                    "MacLaren's",
                                    ["MacLaren's",
                                     "MacLoughlin's",
@@ -107,10 +109,8 @@
             
 
             // Update what the display shows
-            hide($("#start"));
-            unhide($("#time"));
-            unhide($("#question"));
-            unhide($(".option"));
+            hide("#start");
+            unhide("#in-game");
 
             
             
@@ -132,6 +132,8 @@
 
                 console.log(timeLeft);
             } else {
+                // Increase the number of unaswered questions
+                numUnaswered++;
                 console.log("ran out of time");
 
                 // Pause timer and show answer
@@ -142,14 +144,9 @@
 
                 // Wait 3 seconds before moving on to the next question
                 setTimeout(function() {
-                    // Change the green correct option back to grey
-                    answerButton.removeClass("btn-success");
-                    answerButton.addClass("btn-dark");
-                    if (questions.length >= 1) {
-                        getNewQuestion();
-                    } else {
-                        alert("game over");
-                    }
+                    
+                    
+                    questionOrStats()
                 }, 3000);
             }
         }
@@ -177,18 +174,12 @@
 
             // Wait 3 seconds before moving on to the next question
             setTimeout(function() {
-                // Change the green correct option back to grey
-                answerButton.removeClass("btn-success");
-                answerButton.addClass("btn-dark");
+                
                 // Change the red incorrect option back to grey
                 thisButton.removeClass("btn-success");
                 thisButton.addClass("btn-dark");
 
-                if (questions.length >= 1) {
-                    getNewQuestion();
-                } else {
-                    alert("game over");
-                }
+                questionOrStats()
             }, 3000);
         }
         
@@ -197,9 +188,20 @@
             // Disable the ability to make another guess
             $(".option").prop("disabled", true);
 
+            console.log(answerButton);
             // Show correct answer in green
             answerButton.removeClass("btn-dark");
             answerButton.addClass("btn-success");
+        }
+
+        function questionOrStats() {
+            answerButton.removeClass("btn-success");
+            answerButton.addClass("btn-dark");
+            if (questions.length >= 1) {
+                getNewQuestion();
+            } else {
+                showStats();
+            }
         }
 
         function getNewQuestion() {
@@ -208,9 +210,6 @@
 
             // Enable the buttons to make a guess
             $(".option").prop("disabled", false);
-
-            // Set time interval to countd down every 1 second
-            intervalId = setInterval(countDown, 1000);
 
             // Get random question
             currentQuestion = questions[Math.floor(Math.random() * questions.length)];
@@ -235,12 +234,13 @@
                 $("#option" + (i + 1)).text(option);
             }
 
-
-
             // Remove the question for the array of questions
             questions.splice(questions.indexOf(currentQuestion), 1);
 
-            console.log(questions);
+            // Set time interval to countd down every 1 second
+            intervalId = setInterval(countDown, 1000);
+
+            console.log(answerButton);
         }
 
         function showAnswer(outcome) {
@@ -261,7 +261,16 @@
                 default:
                 $("#answer-outcome").text("out of time");
             }
+        }
 
+        function showStats() {
+            console.log(numCorrect, numIncorrect);
+            hide("#in-game");
+
+            $("#num-correct").text(numCorrect);
+            $("#num-incorrect").text(numIncorrect);
+            $("#num-unanswered").text(numUnaswered);
+            unhide("#post-game");
         }
 
         // Reset the game
@@ -269,14 +278,16 @@
             clearInterval(intervalId);
 
             unhide("#start");
-            hide("#time");
-            hide("#question");
-            hide(".option");
+            hide("#in-game");
             hide("#answer-outcome");
-            hide($("#reset"));
+            hide("#post-game");
 
             // Reset the time to 15 seconds
             timeLeft = START_TIME;
+
+            numCorrect = 0;
+            numIncorrect = 0;
+            numUnaswered = 0;
 
             // Create TriviaQuestion objects
             createQuestions();

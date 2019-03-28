@@ -20,17 +20,28 @@
 <body>
     <div class="container">
         <h1>How I Met Your Mother Trivia!</h1>
+
         <button id="start" class="btn btn-success">Start</button>
-        <p id="time" class="hidden">Time Remaining: <span id="seconds"></span></p>
-        <h2 id="question" class="hidden"></h2>
-        <div class="btn-group-vertical">
-            <button id="option1" class="btn btn-dark option hidden"></button>
-            <button id="option2" class="btn btn-dark option hidden"></button>
-            <button id="option3" class="btn btn-dark option hidden"></button>
-            <button id="option4" class="btn btn-dark option hidden"></button>
+
+        <div id="in-game" class="hidden">
+            <p id="time" class="">Time Remaining: <span id="seconds"></span></p>
+            <h2 id="question" class=""></h2>
+            <div class="btn-group-vertical">
+                <button id="option1" class="btn btn-dark option"></button>
+                <button id="option2" class="btn btn-dark option"></button>
+                <button id="option3" class="btn btn-dark option"></button>
+                <button id="option4" class="btn btn-dark option"></button>
+            </div>
+            <h3 id="answer-outcome" class="hidden"></h3>
         </div>
-        <p id="answer-outcome" class="hidden"></p>
-        <button id="reset" class="btn btn-dark hidden">Reset</button>
+
+        <div id="post-game" class="hidden">
+            <h2>How'd you do?</h2>
+            <p>Correct Answers: <span id="num-correct"></span></p>
+            <p>Incorrect Answers: <span id="num-incorrect"></span></p>
+            <p>Unanswered: <span id="num-unanswered"></span></p>
+            <button id="reset" class="btn btn-dark">Reset</button>
+        </div>
     </div>
 </body>
 
