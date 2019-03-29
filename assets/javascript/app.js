@@ -41,7 +41,7 @@
         // Populate questions array with TriviaQuestion objects
         function createQuestions() {
             questions = [
-                new TriviaQuestion("What is the name of bar the gang frequently goes to?",
+                new TriviaQuestion("What is the name of bar the gang frequently visits?",
                                    "MacLaren's",
                                    ["MacLaren's",
                                     "MacLoughlin's",
@@ -70,13 +70,13 @@
                                     "P.S. I Love You"]
                 ),
                 new TriviaQuestion("What are the names of Ted's children?",
-                                   "Luke & Penny",
-                                   ["Luke & Penny",
-                                    "Adam & Sara",
-                                    "David & Jenna",
-                                    "Jerry & Emily"]
+                                   "Luke and Penny",
+                                   ["Luke and Penny",
+                                    "Adam and Sara",
+                                    "David and Jenna",
+                                    "Jerry and Emily"]
                 ),
-                new TriviaQuestion("What do Barney and Ted want to name their bar if they had one?",
+                new TriviaQuestion("If they owned a bar, what would Ted and Barney name it?",
                                    "Puzzles",
                                    ["Puzzles",
                                     "Clues",
@@ -104,13 +104,48 @@
                                     "Josh Radnor",
                                     "Neil Patrick Harris"]
                 ),
-                new TriviaQuestion("How many seasons are there?",
+                new TriviaQuestion("How many seasons are in the series?",
                                    "9",
                                    ["9",
                                     "7",
                                     "8",
                                     "10"]
                 ),
+                new TriviaQuestion("Who is Robin's archenemy?",
+                                   "Patrice",
+                                   ["Patrice",
+                                    "Clarisse",
+                                    "Clara",
+                                    "Paula"]
+                ),
+                new TriviaQuestion("Which trio attended the same university together?",
+                                   "Ted, Marshall, and Lily",
+                                   ["Ted, Marshall, and Lily",
+                                    "Marshall, Barney, and Ted",
+                                    "Lily, Marshall, and Barney",
+                                    "Robin, Lily, and Marshall"]
+                ),
+                new TriviaQuestion("Which one of these is not one of Barney's catchphrases?",
+                                   "Bottom's up!",
+                                   ["Bottom's up!",
+                                    "Legendary",
+                                    "Have you met Ted?",
+                                    "Suit up!"]
+                ),
+                new TriviaQuestion("Which character got a tattoo of a butterfly on his/her lower back?",
+                                   "Ted",
+                                   ["Ted",
+                                    "Barney",
+                                    "Marshall",
+                                    "Lily"]
+                ),
+                new TriviaQuestion("Who is Linus?",
+                                   "Lily's bartender",
+                                   ["Lily's bartender",
+                                    "One of Robin's exes",
+                                    "Barney's half brother",
+                                    "Ted's high school best friend"]
+                )
             ]
         }
 
