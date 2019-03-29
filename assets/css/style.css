@@ -1,6 +1,6 @@
 body {
     background-image: url("../images/new-york-skyline.jpg");
-    background-size: cover;
+    background-size: 100%;
     text-align: center;
 }
 

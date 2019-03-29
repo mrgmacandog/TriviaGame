@@ -13,29 +13,32 @@
         // Initialize array of TriviaQuestion objects
         let questions;
 
+        // Initialize the current question being guessed
         let currentQuestion;
 
+        // Initialize the button assoiciated with the correct answer
         let answerButton;
 
-        // TriviaQuestion constructor
-        //     Takes in a question and 4 options
+        // TriviaQuestion Object Constructor
+        // Takes in a question, its answer, and an array of 4 options (including the answer)
         function TriviaQuestion(question, answer, options) {
             this.question = question;
             this.answer = answer;
             this.options = options;
         }
 
+        // Initialize the counters for the outcome of each question
         let numCorrect = 0;
         let numIncorrect = 0;
         let numUnaswered = 0;
 
-
-        // Time left
+        // Time left to answer the question
         let timeLeft;
 
+        // Initialize the variable for the interval object
         let intervalId;
 
-        // Populate questions array with TriviaQueestion objects
+        // Populate questions array with TriviaQuestion objects
         function createQuestions() {
             questions = [
                 new TriviaQuestion("What is the name of bar the gang frequently goes to?",
@@ -43,61 +46,71 @@
                                    ["MacLaren's",
                                     "MacLoughlin's",
                                     "MacLure's",
-                                    "MacMaster's"]),
+                                    "MacMaster's"]
+                ),
                 new TriviaQuestion("What color and instrument does Ted steal for Robin?",
                                    "Blue French Horn",
                                    ["Blue French Horn",
                                     "Blue Trumpet",
                                     "Red French Horn",
-                                    "Red Trumpet"]),
+                                    "Red Trumpet"]
+                ),
                 new TriviaQuestion("Which acronym does Barney use to describe his job?",
                                    "P.L.E.A.S.E.",
                                    ["P.L.E.A.S.E.",
                                     "S.E.C.R.E.T.",
                                     "W.O.R.K.",
-                                    "S.T.O.P."]),
+                                    "S.T.O.P."]
+                ),
                 new TriviaQuestion("What is the first Robin Sparkles song the gang listens to?",
                                    "Let's Go To The Mall",
                                    ["Let's Go To The Mall",
                                     "Sandcastles in the Sand",
                                     "The Beaver Song",
-                                    "P.S. I Love You"]),
+                                    "P.S. I Love You"]
+                ),
                 new TriviaQuestion("What are the names of Ted's children?",
                                    "Luke & Penny",
                                    ["Luke & Penny",
                                     "Adam & Sara",
                                     "David & Jenna",
-                                    "Jerry & Emily"]),
+                                    "Jerry & Emily"]
+                ),
                 new TriviaQuestion("What do Barney and Ted want to name their bar if they had one?",
                                    "Puzzles",
                                    ["Puzzles",
                                     "Clues",
                                     "Questions",
-                                    "Kisses"]),
+                                    "Kisses"]
+                ),
                 new TriviaQuestion("What year is it when Ted is telling his children how he met their mother?",
                                    "2030",
                                    ["2030",
                                     "2015",
                                     "2020",
-                                    "2025"]),
+                                    "2025"]
+                ),
                 new TriviaQuestion("At what occasion does Ted find a goat in his apartment?",
                                    "His 31th birthday",
                                    ["His 31th birthday",
                                     "His 30st birthday",
                                     "New Year's Day",
-                                    "Halloween"]),
+                                    "Halloween"]
+                ),
                 new TriviaQuestion("Who narrates the show?",
                                    "Bob Saget",
                                    ["Bob Saget",
                                     "Jason Segel",
                                     "Josh Radnor",
-                                    "Neil Patrick Harris"]),
+                                    "Neil Patrick Harris"]
+                ),
                 new TriviaQuestion("How many seasons are there?",
                                    "9",
                                    ["9",
                                     "7",
                                     "8",
-                                    "10"]),
+                                    "10"]
+                ),
             ]
         }
 
@@ -106,18 +119,12 @@
             // Get random question
             getNewQuestion();
 
-            
-
             // Update what the display shows
-            hide("#start");
+            hide("#pre-game");
             unhide("#in-game");
-
-            
-            
-            // Get new question after 15 seconds
-            // setTimeout(getNewQuestion, 15000);
         }
 
+        // Updates the time left and the progress bar every second
         function countDown() {
             // Decrease one second
             timeLeft -= 1;
@@ -132,11 +139,13 @@
             // Shorten the bar after each second
             $(".progress-bar").css("width", timeLeft / START_TIME * 100 + "%");
 
+            // Change the bar color to red to inform the user that time is almost up
             if (timeLeft <= 3) {
                 $(".progress-bar").removeClass("bg-info");
                 $(".progress-bar").addClass("bg-danger");
             }
 
+            // Once the user runs out of time
             if (timeLeft === 0) {
                 // Increase the number of unaswered questions
                 numUnaswered++;
@@ -150,57 +159,29 @@
 
                 // Wait 3 seconds before moving on to the next question
                 setTimeout(function() {
-                    
-                    
+                    // Decide if there is still a question that still needs to be answered
                     questionOrStats()
                 }, 3000);
             }
-            // if (timeLeft > 0) {
-            //     // Decrease one second
-            //     timeLeft -= 1;
-
-            //     // Update the time remaining on the web page
-            //     if (timeLeft === 1) {  // Change "Seconds" to "Second" for 1 secsond remaining
-            //         $("#seconds").text(timeLeft + " Second");
-            //     } else {
-            //         $("#seconds").text(timeLeft + " Seconds");
-            //     }
-
-            //     console.log(timeLeft);
-            // } else {
-            //     // Increase the number of unaswered questions
-            //     numUnaswered++;
-            //     console.log("ran out of time");
-
-            //     // Pause timer and show answer
-            //     showAnswer("time");
-
-            //     // Highlight correct answer in green
-            //     highlightAnswer();
-
-            //     // Wait 3 seconds before moving on to the next question
-            //     setTimeout(function() {
-                    
-                    
-            //         questionOrStats()
-            //     }, 3000);
-            // }
         }
 
+        // Checks to see if the option chosen is correct
         function checkOption() {
+            // Convert this to a jQuery object and store it in a variable
             let thisButton = $(this);
 
             // Highlight correct answer in green
             highlightAnswer();
 
+            // If user chooses the right answer
             if (thisButton.text() === currentQuestion.answer) {
                 // Increase the number of correct answers
                 numCorrect++;
                 // Pause timer and show answer
                 showAnswer("correct");
-
-            } else {
-                thisButton.removeClass("btn-dark");
+            } else {  // If user chooses the wrong answer
+                // Highlight the wrong answer chosen in red
+                thisButton.removeClass("btn-secondary");
                 thisButton.addClass("btn-danger");
                 // Increase the number of incorrect answers
                 numIncorrect++;
@@ -210,11 +191,11 @@
 
             // Wait 3 seconds before moving on to the next question
             setTimeout(function() {
-                
                 // Change the red incorrect option back to grey
                 thisButton.removeClass("btn-danger");
-                thisButton.addClass("btn-dark");
+                thisButton.addClass("btn-secondary");
 
+                // Decide if there is still a question that still needs to be answered
                 questionOrStats()
             }, 3000);
         }
@@ -224,22 +205,28 @@
             // Disable the ability to make another guess
             $(".option").prop("disabled", true);
 
-            console.log(answerButton);
             // Show correct answer in green
-            answerButton.removeClass("btn-dark");
+            answerButton.removeClass("btn-secondary");
             answerButton.addClass("btn-success");
         }
 
+        // Decide if there is still a question that still needs to be answered
         function questionOrStats() {
+            // Change the green correct option back to grey
             answerButton.removeClass("btn-success");
-            answerButton.addClass("btn-dark");
+            answerButton.addClass("btn-secondary");
+
+            // If there is still a question to be guessed
             if (questions.length >= 1) {
+                // Get a new question
                 getNewQuestion();
-            } else {
+            } else {  // If there are no more questions
+                // Go to stats screen
                 showStats();
             }
         }
 
+        // Gets a random question to be guessed
         function getNewQuestion() {
             // Reset time
             timeLeft = START_TIME;
@@ -257,8 +244,11 @@
 
             // Update display
             $("#seconds").text(START_TIME + " Seconds");
-            hide("#answer-outcome");
             $("#question").text(currentQuestion.question);
+            hide("#answer-outcome");
+
+            // Iterate over all the options, randomly assign it to a button,
+            //     and save the button with the correct answer.
             for (let i = 0; i < 4; i++) {
                 // Get random option from the question's options
                 let option = currentQuestion.options[Math.floor(Math.random() * currentQuestion.options.length)];
@@ -271,7 +261,7 @@
                     answerButton = $("#option" + (i + 1));
                 }
 
-                // Set the option text to be the rand option
+                // Set the option text to be the random option
                 $("#option" + (i + 1)).text(option);
             }
 
@@ -280,10 +270,10 @@
 
             // Set time interval to countd down every 1 second
             intervalId = setInterval(countDown, 1000);
-
-            console.log(answerButton);
         }
 
+        // Takes in the outcome of the question ("correct", "incorrect", or "time")
+        //     and shows the user the outcome on the display
         function showAnswer(outcome) {
             // Clear the interval timer
             clearInterval(intervalId);
@@ -291,37 +281,40 @@
             // Inform user if they are right or wrong
             unhide("#answer-outcome");
 
+            // Switch case for correct, incorrect, or out of time (time)
             switch(outcome) {
                 case "correct":
-                    // switch case for correct, incorrect, 
-                    // $("#answer-outcome").css("color", "#28A745");
                     $("#answer-outcome").text("Correct!");
                     break;
                 case "incorrect":
-                    // $("#answer-outcome").css("color", "#DC3545");
                     $("#answer-outcome").text("Incorrect!");
                     break;
                 default:
-                // $("#answer-outcome").css("color", "#DC3545");
                 $("#answer-outcome").text("Out of time!");
             }
         }
 
+        // Show the aggregated outcomes of all the outcomes
         function showStats() {
-            console.log(numCorrect, numIncorrect);
+            // Hide in-game information
             hide("#in-game");
 
+            // Update stats
             $("#num-correct").text(numCorrect);
             $("#num-incorrect").text(numIncorrect);
             $("#num-unanswered").text(numUnaswered);
+
+            // Unhide post-game information
             unhide("#post-game");
         }
 
         // Reset the game
         function reset() {
+            // Clear the interval timer
             clearInterval(intervalId);
 
-            unhide("#start");
+            // Update display
+            unhide("#pre-game");
             hide("#in-game");
             hide("#answer-outcome");
             hide("#post-game");
@@ -329,6 +322,7 @@
             // Reset the time to 15 seconds
             timeLeft = START_TIME;
 
+            // Reset counters to 0
             numCorrect = 0;
             numIncorrect = 0;
             numUnaswered = 0;
